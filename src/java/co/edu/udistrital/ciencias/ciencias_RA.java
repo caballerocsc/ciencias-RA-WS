@@ -6,9 +6,15 @@
 
 package co.edu.udistrital.ciencias;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.sql.DataSource;
 import org.json.simple.JSONObject;
 
 /**
@@ -17,22 +23,40 @@ import org.json.simple.JSONObject;
  */
 @WebService(serviceName = "ciencias_RA")
 public class ciencias_RA {
+    @Resource(name = "dsCienciasRA")
+    private DataSource dsCienciasRA;
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "getContent")
     public JsonWrapper getContent(@WebParam(name = "idUser") String idUser, @WebParam(name = "idContent") String idContent) {
-      JSONObject obj = new JSONObject();
-      obj.put("id",45);
-      obj.put("name","cartilla UD");
-      obj.put("description","Cartilla de prueba");
-      obj.put("type","pdf"); 
-      obj.put("url-content","url de contenido"); 
-      obj.put("url-local-content","url local"); 
-      //System.out.println("hola");
-      System.out.print(obj);
-      JsonWrapper wrapper= new JsonWrapper(obj);
+      JSONObject obj = new JSONObject();     
+      JsonWrapper wrapper=null;
+           try {
+            Connection cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("select * from content where idContent = ?");
+            ps.setInt(1, Integer.parseInt(idContent));
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int i=1;
+                obj.put("id",rs.getInt(i++));
+                obj.put("name",rs.getString(i++));
+                obj.put("description",rs.getString(i++));
+                obj.put("type",rs.getInt(i++)); 
+                obj.put("url-content",rs.getString(i++)); 
+                obj.put("url-local-content",rs.getString(i++)); 
+                System.out.print(obj);
+                rs.close();
+                cn.close(); 
+            }else
+                obj.put("parameterInvalid", idContent);
+        } catch (SQLException sQLException) {
+               System.out.println(sQLException.toString());
+               obj.put("Error",sQLException);
+            return null;
+        }
+        wrapper= new JsonWrapper(obj);
         return wrapper;
     }
 }
