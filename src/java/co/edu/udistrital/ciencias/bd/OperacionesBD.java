@@ -3,34 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package co.edu.udistrital.ciencias.bd;
 
-package co.edu.udistrital.ciencias;
-
-import co.edu.udistrital.ciencias.bd.OperacionesBD;
+import co.edu.udistrital.ciencias.JsonWrapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.jws.WebService;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import javax.sql.DataSource;
+import org.json.simple.JSONObject;
 
 /**
  *
- * @author Usuario
+ * @author Administrador
  */
-@WebService(serviceName = "ciencias_RA")
-public class ciencias_RA {
+public class OperacionesBD {
+
     @Resource(name = "dsCienciasRA")
     private DataSource dsCienciasRA;
-
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "getContent")
-    public JsonWrapper getContent(@WebParam(name = "idUser") String idUser, @WebParam(name = "idContent") String idContent) {
-        OperacionesBD op=new OperacionesBD();
-        return op.getContent(idUser, idContent);
-        /*
-         JSONObject obj = new JSONObject();     
+   
+    public OperacionesBD() {
+        
+    }
+    
+    public JsonWrapper getContent(String idUser,String idContent){
+        JSONObject obj = new JSONObject();     
       JsonWrapper wrapper=null;
            try {
             Connection cn = dsCienciasRA.getConnection();
@@ -57,12 +57,29 @@ public class ciencias_RA {
         }
         wrapper= new JsonWrapper(obj);
         return wrapper;
-        */
-    }
+    }    
     
-    @WebMethod(operationName = "login")
-    public String login(String idUsuario, String password){
-        OperacionesBD op=new OperacionesBD();
-        return op.login(idUsuario, password);
-    }
+     public String login(String idUsuario, String password){
+        Connection cn=null;
+         ResultSet rs=null;
+         String res="";
+         try {
+            cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("select * from user where idUsuario = ? and password=?");
+            ps.setString(1, idUsuario);
+            ps.setString(2, password);
+            rs=ps.executeQuery();
+            if(rs.next()){
+                res="OK";
+            }else
+                res="parameterInvalid";
+            rs.close();
+            cn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesBD.class.getName()).log(Level.SEVERE, null, ex);
+            res="Error";
+        }
+        return res;
+     
+     }
 }
