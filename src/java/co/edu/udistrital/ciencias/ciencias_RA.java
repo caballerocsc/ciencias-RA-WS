@@ -19,8 +19,8 @@ import javax.sql.DataSource;
  */
 @WebService(serviceName = "ciencias_RA")
 public class ciencias_RA {
-    @Resource(name = "dsCienciasRA")
-    private DataSource dsCienciasRA;
+    //@Resource(name = "dsCienciasRA")
+    //private DataSource dsCienciasRA;
 
     /**
      * Web service operation
