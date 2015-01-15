@@ -65,7 +65,7 @@ public class OperacionesBD {
          String res="";
          try {
             cn = dsCienciasRA.getConnection();
-            PreparedStatement ps = cn.prepareStatement("select * from user where idUsuario = ? and password=?");
+            PreparedStatement ps = cn.prepareStatement("select * from usuario where idUsuario = ? and clave=?");
             ps.setString(1, idUsuario);
             ps.setString(2, password);
             rs=ps.executeQuery();
