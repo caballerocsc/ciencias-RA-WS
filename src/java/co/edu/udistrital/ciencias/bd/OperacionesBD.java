@@ -82,4 +82,95 @@ public class OperacionesBD {
         return res;
      
      }
+     
+     public String createCourse(String name, String description, int idTeacher, String token){
+         Connection cn=null;
+         String res="";
+         try {
+            cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("insert into (name_course,idTeacher,token) course values (?,?,?)");
+            ps.setString(1, name);
+            ps.setInt(2, idTeacher);
+            ps.setString(3, token);
+            if(ps.execute()){
+                res="OK";
+            }else
+                res="parameterInvalid";
+            cn.close();
+         } catch (SQLException ex) {
+            Logger.getLogger(OperacionesBD.class.getName()).log(Level.SEVERE, null, ex);
+            res="Error";
+        }
+        return res;
+     }
+     
+     public String createTeacher(String name, String birthday, String email, String password){
+         Connection cn=null;
+         String res="";
+         try {
+             int i=0;
+            cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("insert into teacher (name_teacher,birthday,email,passw) values (?,?,?,?)");
+            ps.setString(i++, name);
+            ps.setString(i++, birthday);
+            ps.setString(i++, email);
+            ps.setString(i++, password);
+            if(ps.execute()){
+                res="OK";
+            }else
+                res="parameterInvalid";
+            cn.close();
+         } catch (SQLException ex) {
+            Logger.getLogger(OperacionesBD.class.getName()).log(Level.SEVERE, null, ex);
+            res="Error";
+        }
+        return res;
+     }
+     
+     public String createStudent(String name, String birthday, String email, String password, String tokenCourse){
+         Connection cn=null;
+         String res="";
+         try {
+            int i=0;
+            cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("insert into student (name_student,name_student,birthday,email,passw,token_course) values (?,?,?,?,?,?)");
+            ps.setString(i++, name);
+            ps.setString(i++, birthday);
+            ps.setString(i++, email);
+            ps.setString(i++, password);
+            ps.setString(i++, tokenCourse);
+            if(ps.execute()){
+                res="OK";
+            }else
+                res="parameterInvalid";
+            cn.close();
+         } catch (SQLException ex) {
+            Logger.getLogger(OperacionesBD.class.getName()).log(Level.SEVERE, null, ex);
+            res="Error";
+        }
+        return res;
+     }
+     
+     public String createContent(String name, String description, String type, String urlContent){
+         Connection cn=null;
+         String res="";
+         try {
+            int i=0;
+            cn = dsCienciasRA.getConnection();
+            PreparedStatement ps = cn.prepareStatement("insert into content (namecontent,description,typecontent, urlcontent) values(?,?,?,?)");
+            ps.setString(i++, name);
+            ps.setString(i++, description);
+            ps.setString(i++, type);
+            ps.setString(i++, urlContent);
+            if(ps.execute()){
+                res="OK";
+            }else
+                res="parameterInvalid";
+            cn.close();
+         } catch (SQLException ex) {
+            Logger.getLogger(OperacionesBD.class.getName()).log(Level.SEVERE, null, ex);
+            res="Error";
+        }
+        return res;
+     }
 }

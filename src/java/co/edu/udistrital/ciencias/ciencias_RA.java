@@ -65,4 +65,28 @@ public class ciencias_RA {
         OperacionesBD op=new OperacionesBD();
         return op.login(idUsuario, password);
     }
+    
+    @WebMethod(operationName = "createCourse")
+    public String createCourse(String name, String description, int idTeacher, String token){
+        OperacionesBD op=new OperacionesBD();
+        return op.createCourse(name, description, idTeacher, token);
+    }
+    
+    @WebMethod(operationName = "createrTeacher")
+    public String createrTeacher(String name, String birthday, String email, String password){
+        OperacionesBD op=new OperacionesBD();
+        return op.createTeacher(name, birthday, email, password);
+    }
+    
+    @WebMethod(operationName ="createStudent")
+    public String createStudent(String name, String birthday, String email, String password, String tokenCourse){
+        OperacionesBD op=new OperacionesBD();
+        return op.createStudent(name, birthday, email, password, tokenCourse);
+    }
+    
+    @WebMethod(operationName = "createContent")
+    public String createContent(String name, String description, String type, String urlContent){
+        OperacionesBD op=new OperacionesBD();
+        return op.createContent(name, description, type, urlContent);
+    }
 }
